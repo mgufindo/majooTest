@@ -1,7 +1,6 @@
 @extends('dashboard')
 
 @section('content')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <div class="container">
         <div class="row">
             <h2>Kategori</h2>
@@ -23,7 +22,6 @@
             </div>
         </div>
     </div>
-    <script src="http://code.jquery.com/jquery-3.5.1.js"></script>
     <script>
         $(document).ready(function () {
             $(document).ready(function () {

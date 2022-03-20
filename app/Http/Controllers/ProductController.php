@@ -11,7 +11,7 @@ class ProductController extends Controller
     public function index()
     {
         $curl = new CurlHelper();
-        $response = $curl->get(env("URL_API")."product");
+        $response = $curl->get(env("URL_API") . "product");
         $result = [];
         if ($response["status"] == "SUCCESS") {
             $result = $response["data"];
@@ -27,7 +27,7 @@ class ProductController extends Controller
     public function dataProdukView()
     {
         $curl = new CurlHelper();
-        $response = $curl->get(env("URL_API")."kategori/list");
+        $response = $curl->get(env("URL_API") . "kategori/list");
         $result = [];
         if ($response["status"] == "SUCCESS") {
             $result = $response["data"];
@@ -58,7 +58,7 @@ class ProductController extends Controller
             mkdir($path, 0777, true);
         }
 
-        $name = uniqid() . '_' . trim($request->get("nama").'.png');
+        $name = uniqid() . '_' . trim($request->get("nama") . '.png');
 
         $file->move($path, $name);
 
@@ -71,7 +71,7 @@ class ProductController extends Controller
         ];
 
         $curl = new CurlHelper();
-        $response = $curl->post($data, env("URL_API").'product');
+        $response = $curl->post($data, env("URL_API") . 'product');
 
         $res = json_decode($response, true);
 
@@ -79,7 +79,7 @@ class ProductController extends Controller
             return response()->json([
                 'status' => 'success',
                 'messsage' => "Nama harus beda"
-            ],501);
+            ], 501);
         }
 
         return response()->json([
@@ -98,8 +98,26 @@ class ProductController extends Controller
 
         $curl = new CurlHelper();
 
-        $curl->post($data,env('URL_API').'product/delete');
+        $curl->post($data, env('URL_API') . 'product/delete');
 
         return 'success';
+    }
+
+    public function dataProdukEdit($id)
+    {
+        $curl = new CurlHelper();
+        $response = $curl->get(env("URL_API") . "product/data-edit/" . $id);
+        $responseKategori = $curl->get(env("URL_API") . "kategori/list");
+
+        $result = [];
+        $resultData = [];
+        if ($response["status"] == "SUCCESS") {
+            $resultData = $response["data"];
+        }
+        if ($responseKategori["status"] == "SUCCESS") {
+            $result = $responseKategori["data"];
+        }
+
+        return view("Product.update")->with(["kategori" => $result, 'data' => $resultData]);
     }
 }

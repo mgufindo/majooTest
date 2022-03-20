@@ -44,7 +44,7 @@ class ProductController extends Controller
             mkdir($path, 0777, true);
         }
 
-        $name = uniqid() . '_' . trim($request->get("nama"));
+        $name = uniqid() . '_' . trim($request->get("nama").'.png');
 
         $file->move($path, $name);
 
@@ -53,15 +53,15 @@ class ProductController extends Controller
             "deskripsi_produk" => $request->get("deskripsi"),
             "harga_produk" => $request->get("harga"),
             "kategori_id" => $request->get("kategoriId"),
-            "image" => config('app.url').$name
+            "image" => $name
         ];
 
         $curl = new CurlHelper();
-        $curl->post($data, env("URL_API"));
+        $response = $curl->post($data, env("URL_API").'product');
 
         return response()->json([
-            'name'          => $name,
-            'original_name' => $file->getClientOriginalName(),
+            'status' => 'success',
+            'messsage' => $response
         ]);
     }
 }

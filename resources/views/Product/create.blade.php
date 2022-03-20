@@ -19,7 +19,7 @@
             <select id="kategoriId" class="js-states form-control">
                 <option></option>
                 @foreach($kategori as $k)
-                    <option value="{{$k["nama_kategori"]}}">{{$k["nama_kategori"]}}</option>
+                    <option value="{{$k["id"]}}">{{$k["nama_kategori"]}}</option>
                 @endforeach
             </select>
         </div>

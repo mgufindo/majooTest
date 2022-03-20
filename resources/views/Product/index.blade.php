@@ -1,11 +1,12 @@
 @extends('dashboard')
 
 @section('content')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <div class="container">
         <div class="row">
             <h2>Product</h2>
             <div class="table-responsive">
+                <a href="{{url("product/create")}}" class="btn btn-dark float-right" style="margin-bottom: 30px">+
+                    Create Product</a>
                 <table id="product" class="table">
                     <thead>
                     <tr>
@@ -29,39 +30,43 @@
             </div>
         </div>
     </div>
-    <script src="http://code.jquery.com/jquery-3.5.1.js"></script>
-    <script>
-        $(document).ready(function () {
-            $(document).ready(function () {
-                var table = $('#product').DataTable({
-                    "processing": true,
-                    "serverSide": true,
-                    responsive: true,
-                    "ajax": "{{env("URL_API")."kategori"}}",
-                    columns: [
-                        // mengambil & menampilkan kolom sesuai tabel database
-                        {
-                            data: 'id',
-                            name: 'id'
-                        },
-                        {
-                            data: 'nama_produk',
-                            name: 'nama_produk'
-                        },
-                        {
-                            data: 'deskripsi_produk',
-                            name: 'deskripsi_produk'
-                        },
-                        {
-                            data: 'harga_produk',
-                            name: 'harga_produk'
-                        },
-                        {
 
-                        }
-                    ],
-                });
-                new $.fn.dataTable.FixedHeader( table );
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#product').DataTable({
+                "processing": true,
+                "serverSide": true,
+                responsive: true,
+                "ajax": "{{env("URL_API")."product"}}",
+                columns: [
+                    // mengambil & menampilkan kolom sesuai tabel database
+                    {
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
+                        data: 'nama_produk',
+                        name: 'nama_produk'
+                    },
+                    {
+                        data: 'deskripsi_produk',
+                        name: 'deskripsi_produk'
+                    },
+                    {
+                        data: 'harga_produk',
+                        name: 'harga_produk'
+                    },
+                    {
+                        data: 'id',
+                        name: 'id'
+                    },
+                ],
+                columnDefs: [{
+                    "targets": 4,
+                    "render": function (data, type, row, meta) {
+                        return `<a href="#${row.id}"><button class='btn btn-primary'>Edit</button></a> | <a href="#${row.id}"><button class="btn btn-danger">Hapus</button></a>`;
+                    }
+                }]
             });
         });
     </script>

@@ -26,6 +26,8 @@ Route::prefix('dashboard')->group(function () {
 Route::prefix('product')->group(function () {
     Route::get('/', [ProductController::class, 'listProduct']);
     Route::get("list",[ProductController::class, 'dataProduk']);
+    Route::get("create",[ProductController::class, 'dataProdukView']);
+    Route::post("create",[ProductController::class, 'create']);
 });
 
 Route::prefix('kategori')->group(function () {

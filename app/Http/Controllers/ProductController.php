@@ -24,18 +24,44 @@ class ProductController extends Controller
         return view("product.index");
     }
 
-    public function dataProduk(Request $request)
+    public function dataProdukView()
     {
         $curl = new CurlHelper();
-        $data = [
-            "draw" => $request->get("draw")
-        ];
-        $response = $curl->post($data,env("URL_API")."product");
+        $response = $curl->get(env("URL_API")."kategori/list");
         $result = [];
         if ($response["status"] == "SUCCESS") {
             $result = $response["data"];
         }
+        return view("product.create")->with("kategori", $result);
+    }
 
-        return $result;
+    public function create(Request $request)
+    {
+        $file = $request->file('file');
+        $path = public_path('image_product');
+
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        $name = uniqid() . '_' . trim($request->get("nama"));
+
+        $file->move($path, $name);
+
+        $data = [
+            "nama_produk" => $request->get("nama"),
+            "deskripsi_produk" => $request->get("deskripsi"),
+            "harga_produk" => $request->get("harga"),
+            "kategori_id" => $request->get("kategoriId"),
+            "image" => config('app.url').$name
+        ];
+
+        $curl = new CurlHelper();
+        $curl->post($data, env("URL_API"));
+
+        return response()->json([
+            'name'          => $name,
+            'original_name' => $file->getClientOriginalName(),
+        ]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Helper\CurlHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class AdminController extends Controller
 {

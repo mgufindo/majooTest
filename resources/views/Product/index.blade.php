@@ -14,6 +14,7 @@
                         <th>Nama Produk</th>
                         <th>Deksripsi Produk</th>
                         <th>Harga Produk</th>
+                        <th>Image</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -23,6 +24,7 @@
                         <th>Nama Produk</th>
                         <th>Deksripsi Produk</th>
                         <th>Harga Produk</th>
+                        <th>Image</th>
                         <th>Action</th>
                     </tr>
                     </tfoot>
@@ -70,6 +72,12 @@
                     },
                     {
                         "targets": 4,
+                        "render": function (data, type, row, meta) {
+                            return `<img src="{{url('/image_product')}}/${row.image}" width=100px>`;
+                        }
+                        },
+                    {
+                        "targets": 5,
                         "render": function (data, type, row, meta) {
                             return `<a href="/product/edit-data/${row.id}"><button class='btn btn-primary')">Edit</button></a> | <button class="btn btn-danger" onclick="deleteProduct(${row.id})">Hapus</button></a>`;
                         }

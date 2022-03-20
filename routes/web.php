@@ -28,6 +28,7 @@ Route::prefix('product')->group(function () {
     Route::get("list",[ProductController::class, 'dataProduk']);
     Route::get("create",[ProductController::class, 'dataProdukView']);
     Route::post("create",[ProductController::class, 'create']);
+    Route::post("delete",[ProductController::class, 'delete']);
 });
 
 Route::prefix('kategori')->group(function () {

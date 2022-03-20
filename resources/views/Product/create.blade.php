@@ -26,7 +26,7 @@
 
         <div class="form-group">
             <form class="dropzone" id="dropzone" enctype="multipart/form-data">
-                <input name="file" type="file" style="color: transparent"/>
+                <input name="file" type="file" hidden/>
             </form>
         </div>
         <button type="submit" class="btn btn-primary float-right" id="button">Submit</button>
@@ -55,7 +55,10 @@
                     harga: document.querySelector('#harga').value,
                     kategoriId: document.querySelector('#kategoriId').value,
                 }),
-                acceptedFiles: ".jpeg,.jpg,.png,.gif"
+                acceptedFiles: ".jpeg,.jpg,.png,.gif",
+                init: function () {
+                    window.location = `{{url('product')}}`
+                }
             });
 
             $('#button').click(function(){

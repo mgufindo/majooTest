@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Helper\CurlHelper;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use function Symfony\Component\Console\Style\success;
 
 class ProductController extends Controller
 {
@@ -63,5 +64,20 @@ class ProductController extends Controller
             'status' => 'success',
             'messsage' => $response
         ]);
+    }
+
+    public function delete(Request $request)
+    {
+        $id = $request->get("id");
+
+        $data = [
+            "id" => $id
+        ];
+
+        $curl = new CurlHelper();
+
+        $curl->post($data,env('URL_API').'product/delete');
+
+        return 'success';
     }
 }

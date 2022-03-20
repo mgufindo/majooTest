@@ -37,7 +37,7 @@
                 "processing": true,
                 "serverSide": true,
                 responsive: true,
-                "ajax": "{{env("URL_API")."product"}}",
+                "ajax": "{{env("URL_API")."product/list"}}",
                 columns: [
                     // mengambil & menampilkan kolom sesuai tabel database
                     {
@@ -64,10 +64,45 @@
                 columnDefs: [{
                     "targets": 4,
                     "render": function (data, type, row, meta) {
-                        return `<a href="#${row.id}"><button class='btn btn-primary'>Edit</button></a> | <a href="#${row.id}"><button class="btn btn-danger">Hapus</button></a>`;
+                        return `<a href="#${row.id}"><button class='btn btn-primary')">Edit</button></a> | <button class="btn btn-danger" onclick="deleteProduct(${row.id})">Hapus</button></a>`;
                     }
                 }]
             });
         });
+
+        function deleteProduct(id) {
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this data!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                closeOnConfirm: false
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            url : `{{url('product/delete')}}`,
+                            type : "POST",
+                            data : {
+                                id: id,
+                                _token: `{{csrf_token()}}`
+                            },
+                            success : function(data)
+                            {
+                                location.reload();
+                            },
+                            error : function(jqXHR, textStatus, errorThrown)
+                            {
+                                alert('Gagal menghapus data');
+                            }
+                        });
+                    }
+                });
+        }
     </script>
 @endsection

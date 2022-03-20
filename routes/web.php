@@ -27,10 +27,12 @@ Route::prefix('dashboard')->group(function () {
 });
 Route::prefix('product')->middleware('authlogin')->group(function () {
     Route::get('/', [ProductController::class, 'listProduct']);
-    Route::get("list",[ProductController::class, 'dataProduk']);
-    Route::get("create",[ProductController::class, 'dataProdukView']);
-    Route::post("create",[ProductController::class, 'create']);
-    Route::post("delete",[ProductController::class, 'delete']);
+    Route::get("list", [ProductController::class, 'dataProduk']);
+    Route::get("create", [ProductController::class, 'dataProdukView']);
+    Route::post("update/{id}", [ProductController::class, 'update']);
+    Route::post("create", [ProductController::class, 'create']);
+    Route::post("delete", [ProductController::class, 'delete']);
+    Route::get("edit-data/{id}", [ProductController::class, 'dataProdukEdit']);
 });
 
 Route::prefix('kategori')->middleware('authlogin')->group(function () {

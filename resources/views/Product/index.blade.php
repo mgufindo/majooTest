@@ -71,7 +71,7 @@
                     {
                         "targets": 4,
                         "render": function (data, type, row, meta) {
-                            return `<a href="#${row.id}"><button class='btn btn-primary')">Edit</button></a> | <button class="btn btn-danger" onclick="deleteProduct(${row.id})">Hapus</button></a>`;
+                            return `<a href="/product/edit-data/${row.id}"><button class='btn btn-primary')">Edit</button></a> | <button class="btn btn-danger" onclick="deleteProduct(${row.id})">Hapus</button></a>`;
                         }
                     }]
             });

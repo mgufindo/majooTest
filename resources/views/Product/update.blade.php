@@ -1,7 +1,7 @@
 @extends("dashboard")
 @section('content')
     <div class="container">
-        <h2 style="margin-bottom: 20px">Create Product</h2>
+        <h2 style="margin-bottom: 20px">Update Product</h2>
         <div class="form-group">
             <label for="nama">Nama Produk</label>
             <input type="text" class="form-control" value="{{$data['nama_produk']}}" id="nama" placeholder="Nama Produk">
@@ -23,9 +23,9 @@
                 <option></option>
                 @foreach($kategori as $k)
                     @if($k['id'] == $data['kategori_id'])
-                    <option value="{{$k["id"]}}" selected>{{$k["nama_kategori"]}}</option>
+                        <option value="{{$k["id"]}}" selected>{{$k["nama_kategori"]}}</option>
                     @else
-                    <option value="{{$k["id"]}}" >{{$k["nama_kategori"]}}</option>
+                        <option value="{{$k["id"]}}" >{{$k["nama_kategori"]}}</option>
                     @endif
                 @endforeach
             </select>
@@ -37,15 +37,17 @@
             <form class="dropzone" id="dropzone" enctype="multipart/form-data">
                 <input name="file" type="file" hidden/>
             </form>
+            <input name="image" type="text" value="{{$data['image']}}" hidden/>
             <span class="text-danger hide" id="errorImage"></span>
         </div>
         <button type="submit" class="btn btn-primary float-right" id="button">Submit</button>
     </div>
 
     <script type="text/javascript">
+        const id = `{{ $data['id'] }}`
         Dropzone.autoDiscover = false;
         $(document).ready(function () {
-              $('input[name="harga"]').keyup(function(e)
+            $('input[name="harga"]').keyup(function(e)
             {
                 if (/\D/g.test(this.value))
                 {
@@ -64,7 +66,7 @@
             var myDropzone = new Dropzone(".dropzone", {
                 autoProcessQueue: false,
                 maxFilesize: 1,
-                url: "{{url('product/create')}}",
+                url: "{{url('product/update')}}/"+id,
                 headers: {
                     'x-csrf-token': `{{csrf_token()}}`,
                 },
@@ -103,7 +105,14 @@
                             $('#errorImage').show()
                         }
 
-                    }else{
+                    }else if(xhr.status == '501'){
+                        swal({
+                            title: "Error!",
+                            text: res.message,
+                            type: "error",
+                        })
+                    }
+                    else{
                         swal({
                             title: "Error Server!",
                             text: "Silahkan coba beberapa saat lagi",
@@ -114,7 +123,67 @@
             });
 
             $('#button').click(function(){
-                myDropzone.processQueue();
+
+                cek = $('#dropzone').hasClass('dz-preview dz-image-preview');
+                if(cek){
+                    // myDropzone.processQueue();
+                }else{
+                    datas = {
+                        nama: document.querySelector('#nama').value,
+                        deskripsi: CKEDITOR.instances.deskripsi.getData(),
+                        harga: document.querySelector('#harga').value,
+                        kategoriId: document.querySelector('#kategoriId').value,
+                        '_token' : `{{csrf_token()}}`
+                    }
+                    $.ajax({
+                        url:'{{url('product/update')}}/'+id,
+                        type:'POST',
+                        data: datas,
+                        beforeSend: function () {
+                            $('#button').html('Loading...')
+                            $('#button').attr('disabled',true)
+                        },
+                        success:function(data){
+                            swal({
+                                title: "Update!",
+                                text: "Your file has been updated.",
+                                type: "success",
+                            }).then((result) => {
+                                if(result.value){
+                                    window.location = `{{url('product')}}`
+                                }
+                            })
+                        },
+                        error: function (jqXHR, textStatus, errorThrown){
+                            console.log(jqXHR)
+                            res = jqXHR.responseJSON
+                            if(jqXHR.status == 422){
+                                swal({
+                                    title: "Error!",
+                                    text: res.message,
+                                    type: "error",
+                                })
+                            }else if(jqXHR.status == 501){
+                                swal({
+                                    title: "Error!",
+                                    text: res.message,
+                                    type: "error",
+                                })
+                            }else{
+                                swal({
+                                    title: "Error Server!",
+                                    text: "Silahkan coba beberapa saat lagi",
+                                    type: "error",
+                                })
+                            }
+                        },
+                        complete: function (param) {
+                            $('#button').html('Submit')
+                            $('#button').attr('disabled',false)
+                        }
+
+                    })
+                }
             });
         })
     </script>

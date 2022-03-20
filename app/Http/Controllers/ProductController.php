@@ -120,4 +120,54 @@ class ProductController extends Controller
 
         return view("Product.update")->with(["kategori" => $result, 'data' => $resultData]);
     }
+
+    public function update($id, Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required',
+            'deskripsi' => 'required',
+            'harga' => 'required',
+            'kategoriId' => 'required',
+        ]);
+
+        if (!empty($validator->fails())) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Periksa kembali form input anda'
+            ], 422);
+        }
+
+        if ($request->file('file')) {
+            $file = $request->file('file');
+            $path = public_path('image_product');
+
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+
+            $name = uniqid() . '_' . trim($request->get("nama") . '.png');
+
+            $file->move($path, $name);
+        } else {
+            $name = $request->get('image');
+        }
+
+        $data = [
+            "nama_produk" => $request->get("nama"),
+            "deskripsi_produk" => $request->get("deskripsi"),
+            "harga_produk" => $request->get("harga"),
+            "kategori_id" => $request->get("kategoriId"),
+            "image" => $name,
+            "id" => $id
+        ];
+
+        $curl = new CurlHelper();
+        $response = $curl->post($data, env("URL_API") . 'product/update');
+
+        return response()->json([
+            'status' => 'success',
+            'message' => $response
+        ]);
+    }
 }

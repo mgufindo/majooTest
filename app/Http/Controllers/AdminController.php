@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Helper\CurlHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -31,5 +32,12 @@ class AdminController extends Controller
     public function dashboard()
     {
         return view("dashboard");
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        Session::flush();
+        return redirect('dashboard/login');
     }
 }

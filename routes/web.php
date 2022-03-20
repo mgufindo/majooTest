@@ -22,6 +22,7 @@ Route::prefix('dashboard')->group(function () {
     Route::get("login", [AdminController::class, 'index']);
     Route::post("login/check", [AdminController::class, 'login']);
     Route::get("/", [AdminController::class, 'dashboard']);
+    Route::get("logout", [AdminController::class, 'logout']);
 });
 Route::prefix('product')->group(function () {
     Route::get('/', [ProductController::class, 'listProduct']);

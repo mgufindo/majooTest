@@ -51,10 +51,10 @@
                         <div class="product-image-wrapper">
                             <div class="single-products">
                                 <div class="productinfo text-center">
-                                    <img src="{{$p["image"]}}" alt=""/>
+                                    <img src="{{url()->current().'/image_product/'.$p["image"]}}" alt=""/>
                                     <p>{{$p["nama_produk"]}}</p>
                                     <p>{{$p["harga_produk"]}}</p>
-                                    <p>{{$p["deskripsi_produk"]}}</p>
+                                    <p>{!! $p['deskripsi_produk']  !!}</p>
                                     <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Beli</a>
                                 </div>
                             </div>

@@ -56,8 +56,11 @@
                     kategoriId: document.querySelector('#kategoriId').value,
                 }),
                 acceptedFiles: ".jpeg,.jpg,.png,.gif",
-                init: function () {
+                success: function(file, response){
                     window.location = `{{url('product')}}`
+                },
+                error: function (response) {
+                  alert("hai")
                 }
             });
 

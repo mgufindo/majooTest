@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Helper\CurlHelper;
-use App\Models\Product;
 use Illuminate\Http\Request;
-use function Symfony\Component\Console\Style\success;
+use Illuminate\Validation\Validator;
 
 class ProductController extends Controller
 {
@@ -38,6 +37,20 @@ class ProductController extends Controller
 
     public function create(Request $request)
     {
+        $validator = $this->validate($request, [
+            'nama' => 'required',
+            'deskripsi' => 'required',
+            'harga' => 'required',
+            'kategori_id' => 'required',
+            'file' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'success',
+                'messsage' => withErrors($validator)->withInput()
+            ]);
+        }
         $file = $request->file('file');
         $path = public_path('image_product');
 

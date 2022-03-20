@@ -59,7 +59,7 @@
     <div class="menu">
         <ul>
             <li>
-                <a href="settings.html" class="transition">
+                <a href="{{url('dashboard/logout')}}" class="transition">
                     <i class="las la-sign-out-alt">Logout</i>
                 </a>
             </li>

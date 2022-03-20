@@ -16,12 +16,12 @@ class ProductController extends Controller
         if ($response["status"] == "SUCCESS") {
             $result = $response["data"];
         }
-        return view("catalog.index")->with(["product" => $result]);
+        return view("Catalog.index")->with(["product" => $result]);
     }
 
     public function listProduct()
     {
-        return view("product.index");
+        return view("Product.index");
     }
 
     public function dataProdukView()
@@ -32,7 +32,7 @@ class ProductController extends Controller
         if ($response["status"] == "SUCCESS") {
             $result = $response["data"];
         }
-        return view("product.create")->with("kategori", $result);
+        return view("Product.create")->with("kategori", $result);
     }
 
     public function create(Request $request)

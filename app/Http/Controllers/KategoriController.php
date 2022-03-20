@@ -8,6 +8,6 @@ class KategoriController extends Controller
 {
     public function listKategori()
     {
-        return view("kategori.index");
+        return view("Kategori.index");
     }
 }

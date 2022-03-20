@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Middleware\AuthLogin;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +25,7 @@ Route::prefix('dashboard')->group(function () {
     Route::get("/", [AdminController::class, 'dashboard']);
     Route::get("logout", [AdminController::class, 'logout']);
 });
-Route::prefix('product')->group(function () {
+Route::prefix('product')->middleware('authlogin')->group(function () {
     Route::get('/', [ProductController::class, 'listProduct']);
     Route::get("list",[ProductController::class, 'dataProduk']);
     Route::get("create",[ProductController::class, 'dataProdukView']);
@@ -32,6 +33,6 @@ Route::prefix('product')->group(function () {
     Route::post("delete",[ProductController::class, 'delete']);
 });
 
-Route::prefix('kategori')->group(function () {
+Route::prefix('kategori')->middleware('authlogin')->group(function () {
     Route::get('/', [KategoriController::class, 'listKategori']);
 });

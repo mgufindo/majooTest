@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Helper\CurlHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 
 class AdminController extends Controller
@@ -27,6 +28,10 @@ class AdminController extends Controller
         $curl = new CurlHelper();
         $respone = $curl->post($data,env("URL_API")."login");
 
+        if ($respone["status"] == "SUCCESS") {
+            Cache::add('key',$respone["data"]);
+        }
+
         return $respone;
     }
 
@@ -37,8 +42,7 @@ class AdminController extends Controller
 
     public function logout()
     {
-        Auth::logout();
-        Session::flush();
+        Cache::flush();
         return redirect('dashboard/login');
     }
 }

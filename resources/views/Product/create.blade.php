@@ -5,14 +5,17 @@
         <div class="form-group">
             <label for="nama">Nama Produk</label>
             <input type="text" class="form-control" id="nama" placeholder="Nama Produk">
+            <span class="text-danger hide" id="errorNama"></span>
         </div>
         <div class="form-group">
             <label for="deskripsi">Deskripsi Produk</label>
             <textarea name="deskripsi" id="deskripsi" name="deksripsi" cols="30" rows="10" class="form-control"></textarea>
+            <span class="text-danger hide" id="errorDeskripsi"></span>
         </div>
         <div class="form-group">
             <label for="deskripsi">Harga Produk</label>
-            <input type="text" class="form-control" id="harga" placeholder="Harga Produk">
+            <input type="text" class="form-control" id="harga" name="harga" placeholder="Harga Produk">
+            <span class="text-danger hide" id="errorHarga"></span>
         </div>
         <div class="form-group">
             <label>Kategori</label>
@@ -22,12 +25,15 @@
                     <option value="{{$k["id"]}}">{{$k["nama_kategori"]}}</option>
                 @endforeach
             </select>
+            <span class="text-danger hide" id="errorKategori"></span>
+
         </div>
 
         <div class="form-group">
             <form class="dropzone" id="dropzone" enctype="multipart/form-data">
                 <input name="file" type="file" hidden/>
             </form>
+            <span class="text-danger hide" id="errorImage"></span>
         </div>
         <button type="submit" class="btn btn-primary float-right" id="button">Submit</button>
     </div>
@@ -35,6 +41,14 @@
     <script type="text/javascript">
         Dropzone.autoDiscover = false;
         $(document).ready(function () {
+            $('input[name="harga"]').keyup(function(e)
+            {
+                if (/\D/g.test(this.value))
+                {
+                    // Filter non-digits from input value.
+                    this.value = this.value.replace(/\D/g, '');
+                }
+            });
             CKEDITOR.replace("deskripsi");
 
             $("#kategoriId").select2({
@@ -57,10 +71,41 @@
                 }),
                 acceptedFiles: ".jpeg,.jpg,.png,.gif",
                 success: function(file, response){
-                    window.location = `{{url('product')}}`
+                    // window.location = `{{url('product')}}`
                 },
-                error: function (response) {
-                  alert("hai")
+                error: function (file,response,xhr) {
+                    if(xhr.status == '422') {
+                        res = JSON.parse(xhr.response)
+                        error = res.errors;
+                        if(error.nama){
+                            $('#errorNama').html(error.nama[0])
+                            $('#errorNama').show()
+                        }
+                        if(error.harga){
+                            $('#errorHarga').html(error.harga[0])
+                            $('#errorHarga').show()
+                        }
+                        if(error.deskripsi){
+                            $('#errorDeskripsi').html(error.deskripsi[0])
+                            $('#errorDeskripsi').show()
+                        }
+                        if(error.kategoriId){
+                            $('#errorKategori').html(error.kategoriId[0])
+                            $('#errorKategori').show()
+                        }
+                        if(error.file){
+                            $('#errorImage').html(error.file[0])
+                            $('#errorImage').show()
+                        }
+
+                    }else{
+                        swal({
+                            title: "Error Server!",
+                            text: "Silahkan coba beberapa saat lagi",
+                            type: "error",
+                        });
+                        window.location = `{{url('product/create')}}`
+                    }
                 }
             });
 

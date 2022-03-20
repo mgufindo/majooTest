@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Helper\CurlHelper;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Validator;
+use Validator;
 
 class ProductController extends Controller
 {
@@ -37,15 +37,15 @@ class ProductController extends Controller
 
     public function create(Request $request)
     {
-        $validator = $this->validate($request, [
+        $validator = Validator::make($request->all(), [
             'nama' => 'required',
             'deskripsi' => 'required',
             'harga' => 'required',
-            'kategori_id' => 'required',
+            'kategoriId' => 'required',
             'file' => 'required'
         ]);
 
-        if ($validator->fails()) {
+        if (!empty($validator->fails())) {
             return response()->json([
                 'status' => 'success',
                 'messsage' => withErrors($validator)->withInput()
@@ -72,6 +72,15 @@ class ProductController extends Controller
 
         $curl = new CurlHelper();
         $response = $curl->post($data, env("URL_API").'product');
+
+        $res = json_decode($response, true);
+
+        if ($res["status"] == "ERROR") {
+            return response()->json([
+                'status' => 'success',
+                'messsage' => "Nama harus beda"
+            ],501);
+        }
 
         return response()->json([
             'status' => 'success',

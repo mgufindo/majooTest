@@ -61,12 +61,19 @@
                         name: 'id'
                     },
                 ],
-                columnDefs: [{
-                    "targets": 4,
-                    "render": function (data, type, row, meta) {
-                        return `<a href="#${row.id}"><button class='btn btn-primary')">Edit</button></a> | <button class="btn btn-danger" onclick="deleteProduct(${row.id})">Hapus</button></a>`;
-                    }
-                }]
+                columnDefs: [
+                    {
+                        "aTargets": [2],
+                        "mRender": function (data, type, full) {
+                            return $("<div/>").html(data).text();
+                        }
+                    },
+                    {
+                        "targets": 4,
+                        "render": function (data, type, row, meta) {
+                            return `<a href="#${row.id}"><button class='btn btn-primary')">Edit</button></a> | <button class="btn btn-danger" onclick="deleteProduct(${row.id})">Hapus</button></a>`;
+                        }
+                    }]
             });
         });
 
@@ -86,18 +93,16 @@
                 .then((willDelete) => {
                     if (willDelete) {
                         $.ajax({
-                            url : `{{url('product/delete')}}`,
-                            type : "POST",
-                            data : {
+                            url: `{{url('product/delete')}}`,
+                            type: "POST",
+                            data: {
                                 id: id,
                                 _token: `{{csrf_token()}}`
                             },
-                            success : function(data)
-                            {
+                            success: function (data) {
                                 location.reload();
                             },
-                            error : function(jqXHR, textStatus, errorThrown)
-                            {
+                            error: function (jqXHR, textStatus, errorThrown) {
                                 alert('Gagal menghapus data');
                             }
                         });

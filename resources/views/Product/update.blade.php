@@ -78,7 +78,7 @@
                 }),
                 acceptedFiles: ".jpeg,.jpg,.png,.gif",
                 success: function(file, response){
-                    // window.location = `{{url('product')}}`
+                    window.location = `{{url('product')}}`
                 },
                 error: function (file,response,xhr) {
                     if(xhr.status == '422') {

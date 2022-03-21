@@ -110,7 +110,16 @@
             });
 
             $('#button').click(function(){
-                myDropzone.processQueue();
+                $cek = $('#dropzone').hasClass('dz-preview dz-image-preview');
+                if ($cek) {
+                    myDropzone.processQueue();
+                } else {
+                    swal({
+                        title: "Error!",
+                        text: 'Form cannot empty',
+                        type: "error",
+                    })
+                }
             });
         })
     </script>

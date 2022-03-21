@@ -48,8 +48,8 @@ class ProductController extends Controller
         if (!empty($validator->fails())) {
             return response()->json([
                 'status' => 'success',
-                'messsage' => withErrors($validator)->withInput()
-            ]);
+                'message' => $validator->errors()
+            ],422);
         }
         $file = $request->file('file');
         $path = public_path('image_product');
@@ -134,7 +134,7 @@ class ProductController extends Controller
         if (!empty($validator->fails())) {
             return response()->json([
                 'status' => 'success',
-                'message' => 'Periksa kembali form input anda'
+                'message' => $validator->errors()
             ], 422);
         }
 

@@ -124,9 +124,9 @@
 
             $('#button').click(function(){
 
-                cek = $('#dropzone').hasClass('dz-preview dz-image-preview');
-                if(cek){
-                    // myDropzone.processQueue();
+                var cek = document.getElementsByClassName('dz-preview dz-image-preview');
+                if(cek.length > 0){
+                    myDropzone.processQueue();
                 }else{
                     datas = {
                         nama: document.querySelector('#nama').value,
@@ -155,14 +155,31 @@
                             })
                         },
                         error: function (jqXHR, textStatus, errorThrown){
-                            console.log(jqXHR)
-                            res = jqXHR.responseJSON
-                            if(jqXHR.status == 422){
-                                swal({
-                                    title: "Error!",
-                                    text: res.message,
-                                    type: "error",
-                                })
+                            if(jqXHR.status == '422') {
+                                res = jqXHR.responseJSON
+                                error = res.message;
+                                console.log(error)
+                                if(error.nama){
+                                    $('#errorNama').html(error.nama[0])
+                                    $('#errorNama').show()
+                                }
+                                if(error.harga){
+                                    $('#errorHarga').html(error.harga[0])
+                                    $('#errorHarga').show()
+                                }
+                                if(error.deskripsi){
+                                    $('#errorDeskripsi').html(error.deskripsi[0])
+                                    $('#errorDeskripsi').show()
+                                }
+                                if(error.kategoriId){
+                                    $('#errorKategori').html(error.kategoriId[0])
+                                    $('#errorKategori').show()
+                                }
+                                if(error.file){
+                                    $('#errorImage').html(error.file[0])
+                                    $('#errorImage').show()
+                                }
+
                             }else if(jqXHR.status == 501){
                                 swal({
                                     title: "Error!",

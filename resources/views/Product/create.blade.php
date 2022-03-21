@@ -71,12 +71,12 @@
                 }),
                 acceptedFiles: ".jpeg,.jpg,.png,.gif",
                 success: function(file, response){
-                    // window.location = `{{url('product')}}`
+                    window.location = `{{url('product')}}`
                 },
                 error: function (file,response,xhr) {
                     if(xhr.status == '422') {
                         res = JSON.parse(xhr.response)
-                        error = res.errors;
+                        error = res.message;
                         if(error.nama){
                             $('#errorNama').html(error.nama[0])
                             $('#errorNama').show()
@@ -104,14 +104,14 @@
                             text: "Silahkan coba beberapa saat lagi",
                             type: "error",
                         });
-                        window.location = `{{url('product/create')}}`
+                        {{--window.location = `{{url('product/create')}}`--}}
                     }
                 }
             });
 
             $('#button').click(function(){
-                $cek = $('#dropzone').hasClass('dz-preview dz-image-preview');
-                if ($cek) {
+                var cek = document.getElementsByClassName('dz-preview dz-image-preview');
+                if(cek.length > 0){
                     myDropzone.processQueue();
                 } else {
                     swal({
